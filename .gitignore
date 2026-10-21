@@ -1,1 +1,14 @@
+# Python environment
+.venv/
+__pycache__/
+*.py[cod]
+
+# Ignore PDF source files
 *.pdf
+
+# Ignore generated Markdown files, but keep README
+*.md
+!README.md
+
+# Ignore generated output
+output/
