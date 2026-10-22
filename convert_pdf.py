@@ -1,18 +1,35 @@
+import argparse
 from pathlib import Path
+
 import pymupdf4llm
 
-# Change this to your PDF filename
-pdf_path = Path("AI_Engineering_Learning_Plan.pdf")
 
-if not pdf_path.is_file():
-    raise FileNotFoundError(f"PDF not found: {pdf_path}")
+def convert_pdf(pdf_path: str | Path) -> str:
+    """Convert a PDF file to Markdown text."""
+    source = Path(pdf_path)
+    if not source.is_file():
+        raise FileNotFoundError(f"PDF file not found: {source}")
+    if source.suffix.lower() != ".pdf":
+        raise ValueError("The input file must have a .pdf extension.")
 
-# Extract PDF content with layout-aware Markdown conversion
-markdown = pymupdf4llm.to_markdown(str(pdf_path))
+    with source.open("rb") as pdf_file:
+        if b"%PDF-" not in pdf_file.read(1024):
+            raise ValueError("The input file does not appear to be a valid PDF.")
 
-# Save the result next to the PDF
-output_path = pdf_path.with_suffix(".md")
-output_path.write_text(markdown, encoding="utf-8")
+    return pymupdf4llm.to_markdown(str(source))
 
-print(f"Conversion completed: {output_path}")
-print(f"Markdown size: {len(markdown):,} characters")
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Convert a PDF file to Markdown.")
+    parser.add_argument("pdf", type=Path, help="Path to the PDF file to convert")
+    args = parser.parse_args()
+
+    markdown = convert_pdf(args.pdf)
+    output_path = args.pdf.with_suffix(".md")
+    output_path.write_text(markdown, encoding="utf-8")
+    print(f"Conversion completed: {output_path}")
+    print(f"Markdown size: {len(markdown):,} characters")
+
+
+if __name__ == "__main__":
+    main()

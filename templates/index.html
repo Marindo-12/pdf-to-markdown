@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Convert a PDF to Markdown on your computer.">
+    <title>PDF to Markdown</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <main class="page">
+      <header class="brand">
+        <img src="{{ url_for('banner') }}"
+             alt="PDF to Markdown Converter">
+        <p class="eyebrow">PRIVATE BY DESIGN</p>
+        <h1>PDF to Markdown</h1>
+        <p class="intro">Turn a document into editable Markdown, right on your computer.</p>
+      </header>
+
+      <section class="converter" aria-labelledby="upload-title">
+        <h2 id="upload-title">Choose a PDF to convert</h2>
+        <p class="privacy-note">
+          Your document is processed locally and is not uploaded to a cloud service.
+        </p>
+
+        {% if message %}
+          <p class="message" role="alert">{{ message }}</p>
+        {% endif %}
+
+        <form action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <label class="file-picker" for="pdf">
+            <span class="upload-icon" aria-hidden="true">↑</span>
+            <span class="picker-title">Select your PDF</span>
+            <span class="picker-help">PDF files up to 25 MB</span>
+            <input id="pdf" name="pdf" type="file" accept=".pdf,application/pdf" required>
+          </label>
+          <button type="submit">Convert to Markdown</button>
+        </form>
+      </section>
+
+      <footer>
+        <p>Conversion happens on this computer. Scanned PDFs may need OCR.</p>
+      </footer>
+    </main>
+  </body>
+</html>

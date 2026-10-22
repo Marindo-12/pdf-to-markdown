@@ -9,6 +9,11 @@ __pycache__/
 # Ignore generated Markdown files, but keep README
 *.md
 !README.md
+!AI_Engineering_Learning_Plan.md
 
 # Ignore generated output
 output/
+
+# Python test and tool caches
+.pytest_cache/
+.ruff_cache/
